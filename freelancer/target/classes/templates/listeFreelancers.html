@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ layout:decorator="template"
+ xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<link rel="stylesheet" type="text/css" href="webjars/bootstrap/4.3.1/css/bootstrap.min.css" />
+<head>
+<meta charset="utf-8">
+<title>Liste des Freelancers</title>
+</head>
+<body>
+<divbody>
+<div th:replace="template">
+</div>
+<div class="container mt-5">
+<div class="card">
+ <div class="card-header">
+ Liste des Freelancers
+</div>
+ <div class="card-body">
+ 
+ <table class="table table-striped">
+ <tr>
+ <th>ID</th><th>Nom Freelancer</th><th>Salaire</th><th>Date Inscription</th><th>Domaine</th>
+ </tr> 
+ <tr th:each="f:${freelancers.content}">
+ <td th:text="${f.idFreelancer}"></td>
+ <td th:text="${f.nomFreelancer}"></td>
+ <td th:text="${f.salaireFreelancer}"></td>
+ <td th:text="${f.dateinscription}"></td>
+<td   th:if= "${!#strings.isEmpty(f.domaine)}"   th:text="${f.domaine.nomDom}"></td>  
+         <td   th:if= "${#strings.isEmpty(f.domaine)}"     th:text="${'Pas de Domaine'}"></td> 
+ <td sec:authorize="hasRole('ADMIN')"><a class="btn btn-success" th:href="@{modifierFreelancer(id=${f.idFreelancer},page=${currentPage})}">Editer</a></td>
+<td sec:authorize="hasRole('ADMIN')"><a class="btn btn-danger" onclick="return confirm('Etes-vous sûr ?')"  th:href="@{supprimerFreelancer(id=${f.idFreelancer}, 
+page=${currentPage},size=${size})}">Supprimer</a></td>
+  
+ </tr> 
+ </table>
+ <ul class="nav nav-pills">
+ <li th:each="page,status:${pages}">
+ <a th:class="${status.index==currentPage?'btn btn-primary':'btn' }"
+ th:href="@{ listeFreelancers(page=${status.index}, size=${size} ) }"
+ th:text="${status.index }"></a>
+ </li>
+ </ul>
+ </div>
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorator="template">
+<link rel="stylesheet" type="text/css" href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" />
+<head>
+<meta charset="utf-8">
+<title>Ajout des Freelancers</title>
+</head>
+<body>
+<divbody>
+<div th:replace="template">
+</div>
+<div class="container mt-5">
+<div class="card">
+<div class="card-header" th:if="${mode=='new'}"> Ajout des Freelancers </div>
+ <div class="card-header" th:if="${mode=='edit'}">Modification des Freelancers
+</div>
+
+<div class="card-body">
+ <form th:action="@{saveFreelancer}" method="post">
+ <div class="form-group">
+<label class="control-label" hidden>ID Freelancer :</label>
+ <input type="hidden" name="idFreelancer" class="form-control"
+th:value="${freelancer.idFreelancer}" />
+</div>
+ <div class="form-group">
+<label class="control-label">Nom Freelancer :</label>
+<input type="text" name="nomFreelancer" class="form-control" th:value="${freelancer.nomFreelancer}" />
+<span th:errors= ${freelancer.nomFreelancer} class="text-danger"> </span>
+ </div>
+ <div class="form-group">
+<label class="control-label">Salaire Freelancers :</label>
+<input type="text" name="salaireFreelancer" class="form-control" th:value="${freelancer.salaireFreelancer}" />
+<span th:errors= ${freelancer.salaireFreelancer} class="text-danger"> </span>
+ </div>
+ <div class="form-group">
+ <label class="control-label">date Inscription :</label>
+<input type="date" name="dateinscription" class="form-control" 
+th:value="${freelancer.dateinscription}"/>
+<span th:errors=${freelancer.dateinscription} class="text-danger">
+</span>
+ </div>
+ <div class="form-group">
+							<label class="control-label">Domaine :</label> 
+							<select     name="domaine" class="form-control" th:value="${freelancer.domaine.idDom}"   th:if= "${!#strings.isEmpty(freelancer.domaine)}" >
+								<option th:each="d:${domaine}" th:if="${mode=='edit'}"
+									th:value="${d.idDom}" th:text="${d.nomDom}"
+									th:selected="${ d.idDom==freelancer.domaine.idDom}"></option>
+
+								<option th:each="d:${domaine}" th:if="${mode=='new'}"
+									th:value="${d.idCat}" th:text="${d.nomDom}"></option>
+								
+							</select>
+							
+						
+						<!-- Pour ne pas avoir d'erreurs si la catégorie est null on ajoute ce select -->
+							<select     name="domaine" class="form-control"    th:if= "${#strings.isEmpty(freelancer.domaine)}" >
+								<option th:each="d:${domaine}" th:value="${d.idDom}" th:text="${d.nomDom}"></option>
+							</select>
+							
+						</div>
+						<label class="control-label">page : </label>
+  <input type="text" name="page"  th:value="${page}"/>
+ <div>
+ <button type="submit" class="btn btn-primary">Valider</button>
+ </div>
+ </form>
+</div>
+ </div>
+ </div>
+ </div>
+</body>
+</html>
